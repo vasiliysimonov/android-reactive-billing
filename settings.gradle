@@ -1,1 +1,1 @@
-include ':AndroidBillingV3'
+include ':android-reactive-billing'

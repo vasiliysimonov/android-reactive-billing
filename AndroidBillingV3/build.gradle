@@ -1,0 +1,35 @@
+buildscript {
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    dexOptions {
+        javaMaxHeapSize rootProject.ext.dexHeapSize
+    }
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile 'io.reactivex:rxjava:1.1.7'
+    testCompile rootProject.ext.JUnit
+    testCompile rootProject.ext.Mockito
+    testCompile 'com.google.guava:guava:18.0'
+    compile 'com.android.support:support-annotations:' + rootProject.ext.androidSupportVersion
+    compile rootProject.ext.androidAppcompatV7
+}

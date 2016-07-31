@@ -27,9 +27,9 @@ android {
 
 dependencies {
     compile 'io.reactivex:rxjava:1.1.7'
+    compile 'com.android.support:support-annotations:' + rootProject.ext.androidSupportVersion
+    compile rootProject.ext.androidAppcompatV7
     testCompile rootProject.ext.JUnit
     testCompile rootProject.ext.Mockito
     testCompile 'com.google.guava:guava:18.0'
-    compile 'com.android.support:support-annotations:' + rootProject.ext.androidSupportVersion
-    compile rootProject.ext.androidAppcompatV7
 }

@@ -1,9 +1,9 @@
 package synergy.android.billing.reactive;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.FragmentActivity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -47,21 +47,21 @@ public class Billing {
 	/* TODO: for security, generate your payload here for verification. See the comments on
      *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
      *        an empty string, but on a production app you should carefully generate this. */
-	public void startSubscription(FragmentActivity activity, String item) {
+	public void startSubscription(Activity activity, String item) {
 		startSubscription(activity, item, "");
 	}
 
-	public void startSubscription(FragmentActivity activity, String item, String payload) {
+	public void startSubscription(Activity activity, String item, String payload) {
 		if (!iabHelper.isPurchaseFlowLaunched()) {
 			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_SUBS, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
 		}
 	}
 
-	public void startPurchase(FragmentActivity activity, String item) {
+	public void startPurchase(Activity activity, String item) {
 		startPurchase(activity, item, "");
 	}
 
-	public void startPurchase(FragmentActivity activity, String item, String payload) {
+	public void startPurchase(Activity activity, String item, String payload) {
 		if (!iabHelper.isPurchaseFlowLaunched()) {
 			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_INAPP, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
 		}

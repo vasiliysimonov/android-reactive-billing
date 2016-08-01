@@ -1,7 +1,12 @@
 buildscript {
     dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
+}
+
+repositories {
+    jcenter()
 }
 
 apply plugin: 'com.android.library'
@@ -26,10 +31,9 @@ android {
 }
 
 dependencies {
-    compile 'io.reactivex:rxjava:1.1.7'
-    compile 'com.android.support:support-annotations:' + rootProject.ext.androidSupportVersion
-    compile rootProject.ext.androidAppcompatV7
-    testCompile rootProject.ext.JUnit
-    testCompile rootProject.ext.Mockito
+    compile 'com.android.support:support-annotations:23.4.0'
+    provided 'io.reactivex:rxjava:1.1.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'com.google.guava:guava:18.0'
 }

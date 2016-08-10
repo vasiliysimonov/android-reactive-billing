@@ -16,6 +16,7 @@ import synergy.android.billing.v3.util.IabException;
 import synergy.android.billing.v3.util.IabHelper;
 import synergy.android.billing.v3.util.IabResult;
 import synergy.android.billing.v3.util.Inventory;
+import synergy.android.billing.v3.util.Purchase;
 
 public class Billing {
 
@@ -46,6 +47,10 @@ public class Billing {
 		return iabHelper.isBillingAvailable();
 	}
 
+	public boolean isSubscriptionSupported() {
+		return iabHelper.subscriptionsSupported();
+	}
+
 	public Observable<Inventory> inventoryObservable() {
 		return inventorySubject.doOnSubscribe(this::requestInventory);
 	}
@@ -63,8 +68,10 @@ public class Billing {
 	}
 
 	public void startSubscription(Activity activity, String item, String payload) {
-		if (!iabHelper.isPurchaseFlowLaunched()) {
-			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_SUBS, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+		try {
+			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_SUBS, null, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+		} catch (IabHelper.IabAsyncInProgressException e) {
+			throw new IllegalStateException(e); // programmer's error
 		}
 	}
 
@@ -73,8 +80,10 @@ public class Billing {
 	}
 
 	public void startPurchase(Activity activity, String item, String payload) {
-		if (!iabHelper.isPurchaseFlowLaunched()) {
-			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_INAPP, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+		try {
+			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_INAPP, null, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+		} catch (IabHelper.IabAsyncInProgressException e) {
+			throw new IllegalStateException(e); // programmer's error
 		}
 	}
 
@@ -82,11 +91,22 @@ public class Billing {
 		return iabHelper.handleActivityResult(requestCode, resultCode, data);
 	}
 
+	public Future<?> consume(Purchase item) {
+		return background.submit(() -> {
+			try {
+				iabHelper.consume(item);
+				requestInventory();
+			} catch (IabException e) {
+				throw new IllegalStateException(e); // programmer's error
+			}
+		});
+	}
+
 	public void requestInventory() {
 		if (initialized && (lastInventoryJob == null || lastInventoryJob.isDone())) {
 			lastInventoryJob = background.submit(() -> {
 				try {
-					Inventory i = iabHelper.queryInventory(false, null);
+					Inventory i = iabHelper.queryInventory();
 					inventorySubject.onNext(i);
 				} catch (Exception e) {
 					inventorySubject.onError(e);

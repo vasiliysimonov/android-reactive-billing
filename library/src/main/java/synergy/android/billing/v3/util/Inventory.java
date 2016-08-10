@@ -28,7 +28,7 @@ public class Inventory {
     Map<String,SkuDetails> mSkuMap = new HashMap<String,SkuDetails>();
     Map<String,Purchase> mPurchaseMap = new HashMap<String,Purchase>();
 
-    public Inventory() { }
+    Inventory() { }
 
     /** Returns the listing details for an in-app product. */
     public SkuDetails getSkuDetails(String sku) {
@@ -66,7 +66,7 @@ public class Inventory {
     List<String> getAllOwnedSkus() {
         return new ArrayList<String>(mPurchaseMap.keySet());
     }
-    
+
     /** Returns a list of all owned product IDs of a given type */
     List<String> getAllOwnedSkus(String itemType) {
         List<String> result = new ArrayList<String>();

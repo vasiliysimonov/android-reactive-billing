@@ -14,7 +14,6 @@ import synergy.android.billing.v3.util.IabResult;
 import synergy.android.billing.v3.util.Inventory;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -40,7 +39,7 @@ public class ReactiveBillingTest {
 		Billing wrapper = new Billing(helper, sameThreadExecutor);
 		wrapper.onSetupFinished(new IabResult(IabHelper.BILLING_RESPONSE_RESULT_OK, null));
 
-		verify(helper).queryInventory(anyBoolean(), any());
+		verify(helper).queryInventory();
 	}
 
 	@Test
@@ -49,7 +48,7 @@ public class ReactiveBillingTest {
 		wrapper.onSetupFinished(new IabResult(IabHelper.BILLING_RESPONSE_RESULT_ERROR, null));
 		wrapper.inventoryObservable().doOnError(e -> { });
 
-		verify(helper, never()).queryInventory(anyBoolean(), any());
+		verify(helper, never()).queryInventory();
 	}
 
 	@Test
@@ -57,7 +56,7 @@ public class ReactiveBillingTest {
 		Billing wrapper = new Billing(helper, sameThreadExecutor);
 		wrapper.inventoryObservable().subscribe();
 
-		verify(helper, never()).queryInventory(anyBoolean(), any());
+		verify(helper, never()).queryInventory();
 	}
 
 	@Test

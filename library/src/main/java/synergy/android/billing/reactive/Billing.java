@@ -1,11 +1,13 @@
 package synergy.android.billing.reactive;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import rx.Observable;
@@ -25,7 +27,16 @@ public class Billing {
 	private Future<?> lastInventoryJob;
 	private boolean initialized;
 
-	public Billing(IabHelper iabHelper, ExecutorService backgroundExecutor) {
+	public Billing(Context context, String apiKey) {
+		this(context, apiKey, Executors.newSingleThreadExecutor());
+	}
+
+	public Billing(Context context, String apiKey, ExecutorService backgroundExecutor) {
+		this(new IabHelper(context, apiKey), backgroundExecutor);
+	}
+
+	@VisibleForTesting
+	Billing(IabHelper iabHelper, ExecutorService backgroundExecutor) {
 		this.iabHelper = iabHelper;
 		this.background = backgroundExecutor;
 		iabHelper.startSetup(this::onSetupFinished);

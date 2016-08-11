@@ -20,8 +20,6 @@ import synergy.android.billing.v3.util.Purchase;
 
 public class Billing {
 
-	private static final int REQUEST_PURCHASE = 12063;
-
 	private final BehaviorSubject<Inventory> inventorySubject = BehaviorSubject.create();
 	private final IabHelper iabHelper;
 	private final ExecutorService background;
@@ -63,25 +61,25 @@ public class Billing {
 	/* TODO: for security, generate your payload here for verification. See the comments on
      *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
      *        an empty string, but on a production app you should carefully generate this. */
-	public void startSubscription(Activity activity, String item) {
-		startSubscription(activity, item, "");
+	public void startSubscription(Activity activity, int requestCode, String item) {
+		startSubscription(activity, requestCode, item, "");
 	}
 
-	public void startSubscription(Activity activity, String item, String payload) {
+	public void startSubscription(Activity activity, int requestCode, String item, String payload) {
 		try {
-			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_SUBS, null, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_SUBS, null, requestCode, onPurchaseFinishedListener, payload);
 		} catch (IabHelper.IabAsyncInProgressException e) {
 			throw new IllegalStateException(e); // programmer's error
 		}
 	}
 
-	public void startPurchase(Activity activity, String item) {
-		startPurchase(activity, item, "");
+	public void startPurchase(Activity activity, int requestCode, String item) {
+		startPurchase(activity, requestCode, item, "");
 	}
 
-	public void startPurchase(Activity activity, String item, String payload) {
+	public void startPurchase(Activity activity, int requestCode, String item, String payload) {
 		try {
-			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_INAPP, null, REQUEST_PURCHASE, onPurchaseFinishedListener, payload);
+			iabHelper.launchPurchaseFlow(activity, item, IabHelper.ITEM_TYPE_INAPP, null, requestCode, onPurchaseFinishedListener, payload);
 		} catch (IabHelper.IabAsyncInProgressException e) {
 			throw new IllegalStateException(e); // programmer's error
 		}
